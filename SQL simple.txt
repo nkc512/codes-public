@@ -1,0 +1,3 @@
+regex statements
+
+select * from Holidays where name regexp '^[a-zA-Z ]+$' and name like '____%';

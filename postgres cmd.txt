@@ -1,0 +1,67 @@
+heroku pg:psql -a covid19-homelane
+
+CREATE TABLE covid_19_india(
+Sno int,
+Date DATE,
+Time VARCHAR(20),
+State_UnionTerritory VARCHAR(30),
+ConfirmedIndianNational int,
+ConfirmedForeignNational int,
+Cured int,
+Deaths int,
+Confirmed int
+);
+
+--1,2020-01-30,6:00 PM,Kerala,1,0,0,0,1
+ALTER TABLE covid_19_india ALTER COLUMN State_UnionTerritory TYPE VARCHAR(70);
+\copy covid_19_india FROM 'C:/Users/nkc51/Downloads/homelane/covid_19_india.csv' WITH (FORMAT CSV);
+
+
+Create table covid_vaccine_statewise(
+Updated_On date,
+State VARCHAR(70),
+Total_Doses_Administered float,
+Total_Sessions_Conducted float,
+Total_Sites float,
+First_Dose_Administered float,
+Second_Dose_Administered float,
+Male_Individuals_Vaccinated float,
+Female_Individuals_Vaccinated float,
+Transgender_Individuals_Vaccinated float,
+Total_Covaxin_Administered float,
+Total_CoviShield_Administered float,
+Total_Sputnik_V_Administered float,
+AEFI float,
+years_18_45_Age float,
+years_45_60_Age float,
+years_60_Age float,
+Total_Individuals_Vaccinated float);
+
+--16/01/2021,India,48276.0,3455.0,2957.0,48276.0,0.0,23757.0,24517.0,2.0,579.0,47697.0,,,,,,48276.0
+\copy covid_vaccine_statewise FROM 'C:/Users/nkc51/Downloads/homelane/covid_vaccine_statewise.csv' WITH (FORMAT CSV);
+
+create table StatewiseTestingDetails(
+Date date,State VARCHAR(70),TotalSamples float,Negative float,Positive float
+);
+
+Date,State,TotalSamples,Negative,Positive
+2020-04-17,Andaman and Nicobar Islands,1403.0,1210,12.0
+
+\copy StatewiseTestingDetails FROM 'C:/Users/nkc51/Downloads/homelane/StatewiseTestingDetails.csv' WITH (FORMAT CSV);
+
+
+create table Meeting(
+id BIGSERIAL PRIMARY KEY,
+name varchar(250),
+start_date timestamp,
+end_date timestamp,
+frequency varchar(10)
+);
+
+SELECT m FROM Meeting m WHERE DATE(m.end_date) >= DATEADD(day,DATEDIFF(day,1,getdate()),0)
+
+SELECT m FROM Meeting m WHERE DATE(m.end_date) >= DATE(CURRENT_DATE - INTERVAL '1 day');
+
+ALTER TABLE Meeting ALTER COLUMN frequency TYPE int;
+
+Select * from Meeting m where m.end_date::date = current_date::date  or (date_part('day', m.end_date)=date_part('day', current_date::date)) or (date_part('dow', m.end_date)=date_part('dow', current_date::date)) or frequency=1;

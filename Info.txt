@@ -1,0 +1,5 @@
+Java and C++ substrings work differently
+Java:
+substring(int begIndex, int endIndex)
+C++:
+substr (size_t pos, size_t len)
